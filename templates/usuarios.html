@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuarios</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='usuarios.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Inicio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Lista de Usuarios</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <header class="mb-4">
+            <h1 class="text-center">Lista de Usuarios</h1>
+        </header>
+
+        <!-- Botón para activar el modal de agregar usuario -->
+        <div class="text-end mb-3">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarUsuarioModal">
+                + Nuevo Usuario
+            </button>
+        </div>
+        <input oninput="w3.filterHTML('#user01', 'tr', this.value)" placeholder="Buscar Usuario">
+
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Documento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="user01">
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario[0] }}</td>
+                        <td>{{ usuario[1] }}</td>
+                        <td>{{ usuario[2] }}</td>
+                        <td>
+                            <!-- Botón para activar el modal de editar usuario 
+                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" onclick="abrirModalEditarUsuario"
+                                data-id="{{ usuario[0] }}" data-nombre="{{ usuario[1] }}" data-documento="{{ usuario[2] }}" data-password="{{ usuario[3] }}">
+                                Editar
+                            </button>-->
+                            <button class="btn btn-warning" onclick="abrirModalEditarUsuario('{{ usuario[0] }}', '{{ usuario[1] }}', '{{ usuario[2] }}', '{{ usuario[4] }}')">Editar</button>
+                            <form action="{{ url_for('eliminar_usuario', id=usuario[0]) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Modal para agregar usuario -->
+        <div class="modal fade" id="agregarUsuarioModal" tabindex="-1" aria-labelledby="agregarUsuarioModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="agregarUsuarioModalLabel">Agregar Usuario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ url_for('agregar_usuario') }}" method="POST">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre:</label>
+                                <input type="text" id="nombre" name="nombre" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="documento" class="form-label">Documento:</label>
+                                <input type="text" id="documento" name="documento" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña:</label>
+                                <input type="password" id="password" name="password" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para editar usuario -->
+<div class="modal fade" id="editarUsuarioModal" tabindex="-1" aria-labelledby="editarUsuarioModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editarUsuarioModalLabel">Editar Usuario</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editarUsuarioForm" action="{{ url_for('modificar_usuario') }}" method="POST">
+            <input type="hidden" name="id" id="editarUsuarioId">
+            <div class="mb-3">
+              <label for="editarNombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="editarNombre" name="nombre" required>
+            </div>
+            <div class="mb-3">
+              <label for="editarDocumento" class="form-label">Documento</label>
+              <input type="text" class="form-control" id="editarDocumento" name="documento" required>
+            </div>
+            <div class="mb-3">
+              <label for="editarPassword" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="editarPassword" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Llenar el formulario con los datos del usuario seleccionado
+    function abrirModalEditarUsuario(id, nombre, documento, password) {
+      document.getElementById('editarUsuarioId').value = id;
+      document.getElementById('editarNombre').value = nombre;
+      document.getElementById('editarDocumento').value = documento;
+      document.getElementById('editarPassword').value = password;
+      var myModal = new bootstrap.Modal(document.getElementById('editarUsuarioModal'));
+      myModal.show();
+    }
+  </script>
+  
+
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script to handle modal data -->
+    <script>
+        // Handle modal data for editing
+        var editarUsuarioModal = document.getElementById('editarUsuarioModal');
+        editarUsuarioModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Button that triggered the modal
+            var id = button.getAttribute('data-id');
+            var nombre = button.getAttribute('data-nombre');
+            var documento = button.getAttribute('data-documento');
+            var password = button.getAttribute('data-password');
+            
+            var modal = editarUsuarioModal.querySelector('.modal-body #editarUsuarioId');
+            var modalNombre = editarUsuarioModal.querySelector('.modal-body #editarNombre');
+            var modalDocumento = editarUsuarioModal.querySelector('.modal-body #editarDocumento');
+            var modalPassword = editarUsuarioModal.querySelector('.modal-body #editarPassword');
+            
+            modal.value = id;
+            modalNombre.value = nombre;
+            modalDocumento.value = documento;
+            modalPassword.value = password;
+        });
+    </script>
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
+</body>
+</html>

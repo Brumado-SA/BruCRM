@@ -1,0 +1,59 @@
+<h2>Detalles de Pedido</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Código Artículo</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Unidad de Medida</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultado in resultados %}
+            <tr>
+                <td>{{ resultado.CodigoArticulo }}</td>
+                <td>{{ resultado.Descripcion }}</td>
+                <td>{{ resultado.Cantidad }}</td>
+                <td>{{ resultado.UnidadMedida }}</td>
+                <td>{{ resultado.Precio }}</td>
+                <td>{{ resultado.SubTotal }}</td>
+                <td>{{ resultado.Status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h2>Detalles de Factura</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Código Artículo</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Unidad de Medida</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultado2 in resultados2 %}
+            <tr>
+                <td>{{ resultado2.CodigoArticulo }}</td>
+                <td>{{ resultado2.Descripcion }}</td>
+                <td>{{ resultado2.Cantidad }}</td>
+                <td>{{ resultado2.UnidadMedida }}</td>
+                <td>{{ resultado2.Precio }}</td>
+                <td>{{ resultado2.SubTotal }}</td>
+                <td>{{ resultado2.NroFactura }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

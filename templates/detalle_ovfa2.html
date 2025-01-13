@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Pedido-Factura</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon">
+    <title>BruCRM</title
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Inicio</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+    <h2>Detalles de Pedido</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Código Artículo</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Unidad de Medida</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultado in resultados %}
+            <tr>
+                <td>{{ resultado.CodigoArticulo }}</td>
+                <td>{{ resultado.Descripcion }}</td>
+                <td>{{ resultado.Cantidad }}</td>
+                <td>{{ resultado.UnidadMedida }}</td>
+                <td>{{ resultado.Precio }}</td>
+                <td>{{ resultado.SubTotal }}</td>
+                <td>{{ resultado.Status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+
+    </div>
+    <H2>Detalles de Factura</H2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Código Artículo</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Unidad de Medida</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resultado2 in resultados2 %}
+            <tr>
+                <td>{{ resultado2.CodigoArticulo }}</td>
+                <td>{{ resultado2.Descripcion }}</td>
+                <td>{{ resultado2.Cantidad }}</td>
+                <td>{{ resultado2.UnidadMedida }}</td>
+                <td>{{ resultado2.Precio }}</td>
+                <td>{{ resultado2.SubTotal }}</td>
+                <td>{{ resultado2.NroFactura }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

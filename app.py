@@ -202,7 +202,7 @@ def procesar():
         return jsonify({'error': 'Nro Ruta no proporcionado'}), 400
     try:
         # Configuración de la conexión a la base de datos
-        dsn = 'SAP'
+        dsn = 'HANA_DSN'
         usuario = 'USERBRU'
         contrasena = 'Bru.Log@2024.'
         conexion = pyodbc.connect(f'DSN={dsn};UID={usuario};PWD={contrasena}')
@@ -261,7 +261,7 @@ def procesar():
 
 @app.route('/detalle_ovfa')
 def detalle_ovfa():
-    dsn = 'SAP'
+    dsn = 'HANA_DSN'
     usuario = 'USERBRU'
     contrasena = 'Bru.Log@2024.'
     conexion = pyodbc.connect(f'DSN={dsn};UID={usuario};PWD={contrasena}')

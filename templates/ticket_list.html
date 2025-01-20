@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon">
-    <title>BruCRM - Tickets</title>
+    <title>BruCRM</title>
 </head>
 <body>
     <header>
         <div id="logo">
-            <a href="#">Consulta de Tickets</a>
+            <a href="#">Consulta de Pedidos</a>
         </div>
         <nav id="menu">
             <button class="nav-mobile" id="nav-mobile">
@@ -29,6 +29,7 @@
             <ul class="nav-menu">
                 {% if g.user and g.user['rol_user'] == 'admin' %}
                 <li><a href="{{ url_for('listar_usuarios') }}">Gestión de Usuarios</a></li>
+                <li><a href="{{ url_for('tickets.list_tickets') }}">Gestión de Tickets</a></li>
                 {% endif %}
                 <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
             </ul>
@@ -50,7 +51,18 @@
         </section>
         <!-- Div para mostrar los resultados de la segunda consulta -->
         <div id="resultados2">
-            <p>Listado de Tickets</p>
+            {% for ticket in tickets %}
+            <ul class="list-group">
+                <button class="collapsible" data-bs-toggle="collapse" data-bs-target="#collapse-ticket-{{ ticket.id }}" aria-expanded="false">{{ticket.client_id}} - {{ticket.title}} - {{ticket.status_id}}</button>
+                <div id="collapse-ticket-{{ticket.id}}" class="collapse mt-2">
+                    <b>Category: {{ticket.category}}</b><br>
+                    <b>Status: {{ticket.status}}</b><br>
+                    <b>Prioridad: {{ticket.priority}}</b><br>
+                    <b>Creado en: {{ticket.created_at}}</b><br>
+                    <b><a href="/ticket/{{ticket.id}}" class="ver-detalle">Ver Detalles</a></b>
+                </div>
+            </ul>
+            {% endfor %}
         </div>    
         <!-- Modal -->
         <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">

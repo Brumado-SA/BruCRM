@@ -41,28 +41,56 @@
                 <p>¡Bienvenido, {{ g.user['nombre']  }}!</p>
             </div>
             
-            <form id="miFormulario">
-                <label for="nombre">Fecha Pedido:</label>
-                <input type="date" id="nombre" name="nombre" placeholder="Ingrese una fecha" required>
+            <!-- Formulario para la primera consulta -->
+            <form id="fetch-tickets" class="d-flex align-items-center gap-2">
+                <label for="create_at">Tikets creados en:</label>
+                <input type="date" id="created_at" name="created_at" placeholder="Ingrese una fecha">
+
+                <label for="status">Estado:</label>
+                <select id="status" name="status">
+                    <option value="">Todos</option>
+                    {% for status in statuses %}
+                    <option value="{{ status.id }}">{{ status.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="priority">Prioridad:</label>
+                <select id="priority" name="priority">
+                    <option value="">Todas</option>
+                    {% for priority in priorities %}
+                    <option value="{{ priority.id }}">{{ priority.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="category">Categoría:</label>
+                <select id="category" name="category">
+                    <option value="">Todas</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                
                 <input type="hidden" id="cod_vend" name="cod_vend" value="{{ g.user['cod_vend']  }}" >
-                <br>
-                <input type="submit" value="Enviar" style="margin-top: 10px;">
+                <input type="submit" value="Enviar" class="btn btn-primary">
             </form>
         </section>
         <!-- Div para mostrar los resultados de la segunda consulta -->
         <div id="resultados2">
-            {% for ticket in tickets %}
             <ul class="list-group">
-                <button class="collapsible" data-bs-toggle="collapse" data-bs-target="#collapse-ticket-{{ ticket.id }}" aria-expanded="false">{{ticket.client_id}} - {{ticket.title}} - {{ticket.status_id}}</button>
-                <div id="collapse-ticket-{{ticket.id}}" class="collapse mt-2">
-                    <b>Category: {{ticket.category}}</b><br>
-                    <b>Status: {{ticket.status}}</b><br>
-                    <b>Prioridad: {{ticket.priority}}</b><br>
-                    <b>Creado en: {{ticket.created_at}}</b><br>
-                    <b><a href="/ticket/{{ticket.id}}" class="ver-detalle">Ver Detalles</a></b>
-                </div>
+                {% for ticket in tickets %}
+                    <li class="list-group-item mb-2">
+                        <button class="collapsible" data-bs-toggle="collapse" data-bs-target="#collapse-ticket-{{ ticket.id }}" aria-expanded="false">{{ticket.client_id}} - {{ticket.title}} - {{ticket.status_id}}</button>
+                        <div id="collapse-ticket-{{ticket.id}}" class="collapse mt-2">
+                            <b>Category: {{ticket.category}}</b><br>
+                            <b>Status: {{ticket.status}}</b><br>
+                            <b>Prioridad: {{ticket.priority}}</b><br>
+                            <b>Creado en: {{ticket.created_at}}</b><br>
+                            <b><a href="/ticket/{{ticket.id}}" class="ver-detalle">Ver Detalles</a></b>
+                        </div>
+                    </li>
+                {% endfor %}
             </ul>
-            {% endfor %}
+            
         </div>    
         <!-- Modal -->
         <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
@@ -98,6 +126,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     <script src="{{ url_for('static', filename='app.js') }}"></script>
+    <script src="{{ url_for('static', filename='tickets.js') }}"></script>
     <script src="https://www.w3schools.com/lib/w3.js"></script>  
 </body>
 </html>

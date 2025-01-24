@@ -16,14 +16,21 @@ def list_tickets():
     ticket_priorities = list_of_priorities()
     return render_template('ticket_list.html', tickets=tickets, statuses=ticket_statuses, categories=ticket_categories, priorities=ticket_priorities)
 
-@tickets_bp.route('tickets/search', methods=['GET'])
-def tickets_search():
-    data = request.get_json()
-    search_terms = data.get('search_term')
-    if search_terms:
-        tickets = search_tickets(search_terms)
-    else:
-        tickets = fetch_tickets()
+@tickets_bp.route('/tickets', methods=['POST'])
+def searcg_form():
+    acceso = verificar_acceso(['admin', 'user'])
+    if acceso:
+        return acceso
+
+    # Obtener los valores de búsqueda del formulario
+    search_terms = request.form.to_dict()
+    
+    # Realizar la búsqueda en la base de datos conforme  los términos de búsqueda
+    tickets = search_tickets(search_terms)
+    ticket_statuses = list_of_status()
+    ticket_categories = list_of_categories()
+    ticket_priorities = list_of_priorities()
+    return render_template('ticket_list.html', tickets=tickets, statuses=ticket_statuses, categories=ticket_categories, priorities=ticket_priorities)
 
 
 # SQL RELATED FUNCTIONS
@@ -64,6 +71,8 @@ def search_tickets(search_terms):
         # Manejar la excepción de conexión a la base de datos
         print(f"Error al conectar a la base de datos: {e}")
         abort(500, description="An error occurred while fetching tickets.")
+    
+    return tickets
 
 def list_of_status():
     try:

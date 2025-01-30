@@ -42,7 +42,7 @@
             </div>
             
             <!-- Formulario para la primera consulta -->
-            <form id="search-tickets" class="d-flex align-items-center gap-2" action="/tickets" method="post">
+            <form id="search-tickets" class="d-flex align-items-center gap-2" action="/tickets/search" method="post">
                 <label for="create_at">Tikets creados en:</label>
                 <input type="date" id="created_at" name="created_at" placeholder="Ingrese una fecha">
 
@@ -50,7 +50,7 @@
                 <select id="status" name="status">
                     <option value="">Todos</option>
                     {% for status in statuses %}
-                    <option value="{{ status.id }}">{{ status.name }}</option>
+                    <option value="{{ status.id }}" name="status">{{ status.name }}</option>
                     {% endfor %}
                 </select>
 
@@ -58,7 +58,7 @@
                 <select id="priority" name="priority">
                     <option value="">Todas</option>
                     {% for priority in priorities %}
-                    <option value="{{ priority.id }}">{{ priority.name }}</option>
+                    <option value="{{ priority.id }}" name="priority">{{ priority.name }}</option>
                     {% endfor %}
                 </select>
 
@@ -66,7 +66,7 @@
                 <select id="category" name="category">
                     <option value="">Todas</option>
                     {% for category in categories %}
-                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    <option value="{{ category.id }}" name="category">{{ category.name }}</option>
                     {% endfor %}
                 </select>
                 

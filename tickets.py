@@ -19,7 +19,6 @@ def list_tickets():
 
 @tickets_bp.route('/search', methods=['POST'])
 def search_form():
-    pdb.set_trace()
     acceso = verificar_acceso(['admin', 'user'])
     if acceso:
         return acceso
@@ -91,6 +90,8 @@ def search_tickets(search_terms):
                     query = base_query + " AND " + " AND ".join(conditions)
                 else:
                     query = base_query
+                
+                pdb.set_trace()
                 
                 cursor.execute(query)
                 columns = [desc[0] for desc in cursor.description]

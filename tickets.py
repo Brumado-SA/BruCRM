@@ -57,7 +57,6 @@ def fetch_tickets():
     return tickets
 
 def search_tickets(search_terms):
-    pdb.set_trace()
     try:
         with conectar() as coneccion:
             with coneccion.cursor() as cursor:
@@ -73,7 +72,7 @@ def search_tickets(search_terms):
                     'status': 'tk.status_id',
                     'priority': 'tk.priority_id',
                     'category': 'tk.category_id',
-                    'created_at': 'DATE(tk.created_at)',
+                    'created_at': 'tk.created_at',
                     'cod_vend': 'tk.creator_id'
                 }
                 
@@ -82,7 +81,11 @@ def search_tickets(search_terms):
                 params = []
                 for key, value in search_terms.items():
                     if value and value != '-1' and value != '':
-                        conditions.append(f"{field_mapping[key]} = %s")
+                        if key == 'created_at':
+                            conditions.append(f"DATE({field_mapping[key]}) = DATE('{value}')")
+                            params.append(value)
+                        else:
+                            conditions.append(f"{field_mapping[key]} = {value}")
                         params.append(value)
                
                 # Add conditions to query if they exist
@@ -90,8 +93,6 @@ def search_tickets(search_terms):
                     query = base_query + " AND " + " AND ".join(conditions)
                 else:
                     query = base_query
-                
-                pdb.set_trace()
                 
                 cursor.execute(query)
                 columns = [desc[0] for desc in cursor.description]
